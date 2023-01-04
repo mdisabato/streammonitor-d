@@ -1,6 +1,6 @@
 {
   "name": "streammonitor",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A monitor/silence detector for Icecast/Shoutcast streams",
   "main": "app.coffee",
   "dependencies": {

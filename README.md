@@ -1,6 +1,6 @@
 # streammonitor
 
-streammonitor constantly monitors a Shoutcast/Icecast stream (only MP3 supported right now), and 
+streammonitor constantly monitors a Shoutcast/Icecast stream (only MP3 supported right now), and
 offers a simple HTTP API which returns basic information about the stream, how long it has
 been online/offline, and the current duration of silence (signal below a certain threshold).
 
@@ -12,18 +12,20 @@ To build the container, download/clone this repository, and run:
 
     docker build -t mairlist/streammonitor .
 
-Then run the container, binding the HTTP port (8000), and passing the stream URL and silence threshold 
+Then run the container, binding the HTTP port (8000), and passing the stream URL and silence threshold
 (in dBFS) as environment variables:
 
     docker run -p 8000:8000 -e STREAM_URL=http://sender.eldoradio.de:8000/192 \
                             -e SILENCE_THRESHOLD=-20 -e CHECK_INTERVAL=1000 \
-                            mairlist/streammonitor 
+                            mairlist/streammonitor
 
 ``STREAM_URL`` is a required parameter. ``SILENCE_THRESHOLD`` can be ommited, in which case
 -20 dBFS is assumed. ``CHECK_INTERVAL`` is also optional and defaults to 1000 ms.
 
 The stream URL must be the actual URL for the stream (where the MP3 data is delivered),
 **not** the URL of a pls/m3u file.
+
+To set the timezone use the ``TZ`` env variable.
 
 ## HTTP Interface
 
@@ -44,7 +46,7 @@ Under the root URL, streammonitor returns a JSON object with all data about the 
       "silenceSince": "2015-06-23T12:53:21.903Z",
       "silenceDuration": 0
     }
-    
+
 Meaning of the individual fields:
 
 - ``url`` and ``silenceThreshold`` are what you specified when you started streammonitor.
@@ -67,13 +69,13 @@ Commercial licenses are available on request.
 
 ## Monitoring plugin for e.g. Nagios, Icinga, CheckMK, Shinken
 Basic monitoring plugin in python3
-You need to specify the url of the streammonitor you want to check. You can specify values for changing the state if the silence is longer than CRIT seconds or if you want an alarm for WARN seconds after a 
-reconnection of the stream.  
+You need to specify the url of the streammonitor you want to check. You can specify values for changing the state if the silence is longer than CRIT seconds or if you want an alarm for WARN seconds after a
+reconnection of the stream.
 
-- usage 
+- usage
 ```
     ./check_streammonitor.py -h
-    usage: check_streammonitor.py [-h] -u URL [-c CRIT] [-w WARN]    
+    usage: check_streammonitor.py [-h] -u URL [-c CRIT] [-w WARN]
     optional arguments:
       -h, --help            show this help message and exit
       -u URL, --url URL     URL to streammonitor
