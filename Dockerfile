@@ -11,8 +11,8 @@ LABEL org.opencontainers.image.authors="Torben Weibert" \
       org.opencontainers.image.version="0.0.2" \
       org.opencontainers.image.url="https://github.com/darrick/streammonitor"
 
-RUN npm -g --production install coffeescript && \
-    apk --no-cache add lame curl tzdata && \
+RUN npm -g --omit=dev install coffeescript && \
+    apk --no-cache add lame curl && \
     rm -rf /tmp/* /var/cache/apk/*
 
 WORKDIR /app

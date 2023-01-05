@@ -31,10 +31,14 @@ def main():
 
     # generate more human readable time ranges for online-, offline-, and silenceDuration
     # this will be only used in check output
-    onlineSince=datetime.timedelta(seconds=jsonData["onlineDuration"])
-    offlineSince=datetime.timedelta(seconds=jsonData["offlineDuration"])
-    silenceSince=datetime.timedelta(seconds=jsonData["silenceDuration"])
-    
+    if jsonData["onlineSince"]:
+        onlineSince=datetime.datetime.strptime(jsonData["onlineSince"], '%Y-%m-%dT%H:%M:%S.%fZ').replace(tzinfo=datetime.timezone.utc).astimezone().strftime("%c")
+    if jsonData["offlineSince"]:
+        offlineSince=datetime.datetime.strptime(jsonData["offlineSince"], '%Y-%m-%dT%H:%M:%S.%fZ').replace(tzinfo=datetime.timezone.utc).astimezone().strftime("%c")
+    if jsonData["silenceSince"]:
+        silenceSince=datetime.datetime.strptime(jsonData["silenceSince"], '%Y-%m-%dT%H:%M:%S.%fZ').replace(tzinfo=datetime.timezone.utc).astimezone().strftime("%c")
+
+
 
     # checking the state
     if jsonData["status"] == "OK":
@@ -43,7 +47,7 @@ def main():
             print(f'WARN - Stream {jsonData["url"]} is connected but silent since {silenceSince} (h:m:s)!| silenceDuration={jsonData["silenceDuration"]}s;;{args.crit};;; onlineDuration={jsonData["onlineDuration"]}s;{args.warn};;;; offlineDuration={jsonData["offlineDuration"]}s;;;;;')
             exit(1)
         # if stream is silent longer than crit vaule make it CRIT state
-        elif jsonData["silenceDuration"] > args.crit: 
+        elif jsonData["silenceDuration"] > args.crit:
             print(f'CRIT - Stream {jsonData["url"]} is connected but silent since {silenceSince} (h:m:s)!| silenceDuration={jsonData["silenceDuration"]}s;;{args.crit};;; onlineDuration={jsonData["onlineDuration"]}s;{args.warn};;;; offlineDuration={jsonData["offlineDuration"]}s;;;;;')
             exit(2)
         # if stream is newly connected it will be WARN state until args.warn seconds
